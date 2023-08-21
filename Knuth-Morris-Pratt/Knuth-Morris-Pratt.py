@@ -1,5 +1,3 @@
-from typing import List
-
 # Исходный шаблон
 pattern = "лилила"
 
