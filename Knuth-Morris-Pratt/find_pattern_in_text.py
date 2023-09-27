@@ -1,35 +1,49 @@
-# Строка, в которой ищется подстрока
-text = "лилилось лилилась"
+class SubstringSearch:
+    def __init__(self, text, pattern):
+        self.text = text
+        self.pattern = pattern
+        self.pattern_length = len(pattern)
+        self.text_length = len(text)
+        self.prefix_function = [0] * self.pattern_length
 
-# Подстрока, которую мы ищем в строке
+    def _compute_prefix_function(self):
+        j = 0
+        for i in range(1, self.pattern_length):
+            while j > 0 and self.pattern[i] != self.pattern[j]:
+                j = self.prefix_function[j - 1]
+            if self.pattern[i] == self.pattern[j]:
+                j += 1
+            self.prefix_function[i] = j
+
+    def _search(self) -> int:
+        self._compute_prefix_function()
+        i = 0
+        j = 0
+
+        while i < self.text_length:
+            if self.text[i] == self.pattern[j]:
+                i += 1
+                j += 1
+                if j == self.pattern_length:
+                    return i - j  # Возвращаем позицию, с которой начинается вхождение
+            else:
+                if j > 0:
+                    j = self.prefix_function[j - 1]
+                else:
+                    i += 1
+        return -1  # Вхождение не найдено
+
+    def find(self) -> str:
+        result = self._search()
+        if result != -1:
+            return(f"Образ найден, начиная с позиции {result}")
+        else:
+            return("Образ не найден")
+
+
+# Пример использования класса
+text = "лилилось лилилась"
 pattern = "лилила"
 
-# Инициализация массива префикс-функции для подстроки pattern
-prefix_function = [0] * len(pattern)
-
-# Длины подстроки и строки, в которой ищется подстрока
-pattern_length = len(pattern)
-text_length = len(text)
-
-# Индексы i и j для сравнения символов в строке и подстроке соответственно
-i = 0
-j = 0
-
-# Поиск вхождения шаблона pattern в строке text с использованием префикс-функции
-while i < text_length:
-    if text[i] == pattern[j]:
-        i += 1
-        j += 1
-        if j == pattern_length:
-            print("Образ найден")
-            break
-    else:
-        # Используем префикс-функцию для определения сдвига при несовпадении символов
-        if j > 0:
-            j = prefix_function[j - 1]
-        else: 
-            i += 1
-
-# Если i достигло конца строки, искомый образ не найден
-if i == text_length:
-    print("Образ не найден")
+substring_search = SubstringSearch(text, pattern)
+print(substring_search.find())
