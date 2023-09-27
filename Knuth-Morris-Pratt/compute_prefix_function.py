@@ -1,5 +1,5 @@
 # Исходный шаблон
-pattern = "лилила"
+pattern = "лилил"
 
 # Инициализация массива префикс-функции для шаблона pattern
 prefix_function = [0] * len(pattern)
